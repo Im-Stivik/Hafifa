@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from typing import Iterable, Dict, Any
 
@@ -28,9 +29,8 @@ def get_stocks(stock_settings: Dict[str, Any]):
     write_output_to_csv(data, stock_settings['output'])
 
 def main():
-    for stock in SETTINGS.values():
-        get_stocks(stock)
-
+    with ThreadPoolExecutor() as executor:
+        executor.map(get_stocks, SETTINGS.values())
 
 if __name__ == '__main__':
     main()
