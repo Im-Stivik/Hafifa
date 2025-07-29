@@ -12,14 +12,22 @@ def write_output_to_csv(data: Iterable[Dict[str, Any]], filename: str):
         writer.writeheader()
         writer.writerows(data)
 
-def main():
-    stock = StockRetriever('BTC-USD')
+dates_file = 'bitcoin_dates.txt'
 
-    starting_time = datetime.fromisoformat('2025-03-17 19:00')
-    ending_time = datetime.fromisoformat('2025-06-15 13:00')
+def get_stocks_for(stock_name: str):
+    times = []
 
-    data = stock.get_stock_for_timestamp(starting_time, ending_time)
+    with open(dates_file) as file:
+        times = file.read().split('\n')[:-1]
+
+    times = list(map(lambda time: datetime.fromisoformat(time), times))
+    stock = StockRetriever(stock_name)
+    data = stock.get_stock_for_timestamp(times)
+
     write_output_to_csv(data, 'output.csv')
+
+def main():
+    get_stocks_for('BTC-USD')
 
 
 if __name__ == '__main__':
