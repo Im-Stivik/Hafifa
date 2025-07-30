@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "threading-multiprocessing"
+version = "0.1.0"
+description = "Hafifa Part 4"
+authors = ["Im-Stivik <mogil.sharon@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+yfinance = "^0.2.65"
+pandas = "^2.3.1"
+pydantic = "^2.11.7"
+pydantic-settings = "^2.10.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
