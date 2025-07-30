@@ -5,16 +5,19 @@ from typing import Iterable, Dict, Any
 from src.stock_retriever import StockRetriever
 import csv
 
-from threading_multiprocessing.consts import SETTINGS, RESULT_FIELDS
-from threading_multiprocessing.src.stock_settings import StockSettings
+from consts import SETTINGS, RESULT_FIELDS
+from src.stock_data import Relevant
+from src.stock_settings import StockSettings
 
 
-def write_output_to_csv(data: Iterable[Dict[str, Any]], filename: str):
+def write_output_to_csv(data: Iterable[Relevant], filename: str):
     with open(filename, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=RESULT_FIELDS)
 
         writer.writeheader()
-        writer.writerows(data)
+
+        data_as_dicts = map(lambda stock_data: stock_data.model_dump(), data)
+        writer.writerows(data_as_dicts)
 
 def get_stocks(stock_settings: StockSettings):
     times = []
@@ -24,7 +27,7 @@ def get_stocks(stock_settings: StockSettings):
 
     times = list(map(lambda time: datetime.fromisoformat(time), times))
     stock = StockRetriever(stock_settings.stock_name)
-    data = stock.get_stock_for_timestamp(times)
+    data: Iterable[Relevant] = stock.get_stock_for_timestamp(times)
 
     write_output_to_csv(data, stock_settings.output_file)
 
