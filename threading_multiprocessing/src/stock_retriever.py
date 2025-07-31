@@ -1,8 +1,9 @@
-from datetime import datetime, timezone
-from typing import Dict, Any, List, Iterable
-
+from datetime import datetime
+from typing import List
 import pandas
 from yfinance import Ticker
+
+from src.utils import percentage_change
 
 
 class StockRetriever:
@@ -15,6 +16,6 @@ class StockRetriever:
         end_date = max(timestamps)
         stock_data = self.stock.history(start=starting_date, end=end_date, interval='1h')
         stock_data = stock_data[stock_data.index.isin(timestamps)]
-        stock_data['percentage_change'] = (stock_data['Open'] - stock_data['Close']) / stock_data['Open'] * 100
+        stock_data['percentage_change'] = percentage_change(stock_data['Open'], stock_data['Close'])
 
         return stock_data
