@@ -6,7 +6,6 @@ from typing import List
 
 
 class StockSettings(BaseSettings):
-    name: str
     stock_name: str
     output_file: str
     dates_file: str
